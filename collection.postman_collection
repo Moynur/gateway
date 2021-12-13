@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"month\": 12,\r\n    \"year\": 2020,\r\n    \"name\": \"my name is\",\r\n    \"postcode\": \"my postcode is\",\r\n    \"cvv\": 123,\r\n    \"pan\": \"4000000000000119\",\r\n    \"currency\": \"GBP\",\r\n    \"value\": 123\r\n}"
+					"raw": "{\r\n    \"month\": \"12\",\r\n    \"year\": \"2020\",\r\n    \"name\": \"my name is\",\r\n    \"postcode\": \"my postcode is\",\r\n    \"cvv\": 123,\r\n    \"pan\": \"059\",\r\n    \"currency\": \"GBP\",\r\n    \"value\": 123\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/authorize",
@@ -35,7 +35,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"TransactionId\": \"73ad446a-5ba4-11ec-8190-0242ac1b0003\",\r\n    \"value\": 100,\r\n    \"Currency\": \"GBP\"\r\n}"
+					"raw": "{\r\n    \"transactionId\": \"24958a6c-5bbc-11ec-95f2-0242ac120003\",\r\n    \"value\": 1,\r\n    \"currency\": \"GBP\"\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/capture",
@@ -58,7 +58,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"transactionId\": \"d13e95a6-5ba3-11ec-8dec-0242ac1b0003\",\r\n    \"value\": 100,\r\n    \"currency\": \"GBP\"\r\n}"
+					"raw": "{\r\n    \"transactionId\": \"24958a6c-5bbc-11ec-95f2-0242ac120003\",\r\n    \"value\": 123,\r\n    \"currency\": \"GBP\"\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/refund",
@@ -81,17 +81,17 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"TransactionId\": \"d13e95a6-5ba3-11ec-8dec-0242ac1b0003d\"\r\n}"
+					"raw": "{\r\n    \"transactionId\": \"61b0c0cf-5bbc-11ec-95f2-0242ac120003\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/capture",
+					"raw": "http://localhost:8080/void",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"capture"
+						"void"
 					]
 				}
 			},
