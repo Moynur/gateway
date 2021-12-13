@@ -11,11 +11,12 @@ import (
 )
 
 func (s *service) Authorize(auth models.AuthRequest) (models.AuthResponse, error) {
-	if isSpecialPan(auth.PAN, Authorize) {
-		err := handleErrorCondition(auth.PAN)
+	pan := auth.Card.PAN
+	if isSpecialPan(pan, Authorize) {
+		err := handleErrorCondition(pan)
 		return models.AuthResponse{}, err
 	}
-	if !luhn.Valid(auth.PAN) {
+	if !luhn.Valid(pan) {
 		log.Println("failed luhn")
 		return models.AuthResponse{}, models.ErrFailedLuhn
 	}
@@ -35,7 +36,7 @@ func (s *service) Authorize(auth models.AuthRequest) (models.AuthResponse, error
 		AmountAvailable: auth.Amount.MajorUnits,
 		Currency:        auth.Amount.Currency,
 		OperationType:   state.Auth,
-		Pan:             auth.PAN,
+		Pan:             pan,
 	}
 	log.Println("calling store")
 	err = s.store.Create(&storeRequest)

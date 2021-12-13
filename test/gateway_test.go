@@ -161,7 +161,7 @@ func TestRefund(t *testing.T) {
 		var newRefundResponse handler.RefundResponse
 		err = json.Unmarshal(refundResp.Body(), &newRefundResponse)
 		assert.NoError(t, err)
-		assert.Equal(t, 1000, firstCaptureResponse.ResponseCode)
-		assert.Equal(t, 50, firstCaptureResponse.MajorUnits)
+		assert.Equal(t, 1000, newRefundResponse.ResponseCode)
+		assert.Equal(t, 100, newRefundResponse.AvailableBalance)
 	})
 }

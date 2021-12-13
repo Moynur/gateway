@@ -3,11 +3,8 @@ package models
 import "github.com/google/uuid"
 
 type AuthRequest struct {
-	CardInformation CardData
-	Expiry          Expiry
-	Amount          Amount
-	PAN             string
-	CVV             int
+	Card   Card
+	Amount Amount
 }
 
 type AuthResponse struct {
