@@ -12,7 +12,7 @@ This is a fairly simple payment's gateway, it follows 2 possible cycles of Auth-
 - Client Authentication
 - Config loader needed for things like secrets etc. so It's not hard coded, and then we can pass db credentials as config instead
 - Database integration testing
-- Separate dockerfiles/compose for testing locally vs 'production' wasn't done as this isn't hosted anywhere
+- Separate dockerfiles for testing locally vs 'production' we can add a mock for the testing files if external services need to be called during integration tests
 - The code to decide to accept based on pan could have been re-framed as a fraud engine or something similar to give more context on why it was declined
 - This was all done in http, grpc would be a nicer option
 - Recovery scenarios, in the case perhaps the service has an issue after storing to the db in the real world we'd have to reverse the operation to make sure our 3rd parties are aware of the final state, could be done in an async fashion (publishing webhooks for example to the client to let them know it was successful) or simply just having a method to undo the operation depending on business needs
