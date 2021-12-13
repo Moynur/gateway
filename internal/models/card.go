@@ -5,7 +5,10 @@ type Expiry struct {
 	Year  string
 }
 
-type CardData struct {
+type Card struct {
 	Name     string
 	Postcode string
+	PAN      string
+	CVV      uint
+	Expiry   Expiry
 }

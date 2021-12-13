@@ -16,7 +16,7 @@ import (
 func TestService_Authorize(t *testing.T) {
 	t.Run("Should Fail Auth if Pan is special type which fails on Auth", func(t *testing.T) {
 		req := models.AuthRequest{
-			PAN: "4000000000000119",
+			Card: models.Card{PAN: "4000000000000119"},
 		}
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -29,7 +29,7 @@ func TestService_Authorize(t *testing.T) {
 
 	t.Run("Should Fail Auth if pan is invalid", func(t *testing.T) {
 		req := models.AuthRequest{
-			PAN: "0",
+			Card: models.Card{PAN: "0"},
 		}
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -42,7 +42,7 @@ func TestService_Authorize(t *testing.T) {
 
 	t.Run("Should Fail Auth if pan is invalid", func(t *testing.T) {
 		req := models.AuthRequest{
-			PAN: "0",
+			Card: models.Card{PAN: "0"},
 		}
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -55,7 +55,7 @@ func TestService_Authorize(t *testing.T) {
 
 	t.Run("Should throw unknown error when doing auth", func(t *testing.T) {
 		req := models.AuthRequest{
-			PAN: "059",
+			Card: models.Card{PAN: "059"},
 		}
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -70,20 +70,20 @@ func TestService_Authorize(t *testing.T) {
 
 	t.Run("Should do auth successfully", func(t *testing.T) {
 		req := models.AuthRequest{
-			CardInformation: models.CardData{
+			Card: models.Card{
 				Name:     "some name",
 				Postcode: "some postcode",
-			},
-			Expiry: models.Expiry{
-				Month: "08",
-				Year:  "2021",
+				Expiry: models.Expiry{
+					Month: "08",
+					Year:  "2021",
+				},
+				PAN: "059",
+				CVV: 123,
 			},
 			Amount: models.Amount{
 				MajorUnits: 1000,
 				Currency:   "GBP",
 			},
-			PAN: "059",
-			CVV: 123,
 		}
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()

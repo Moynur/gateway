@@ -19,7 +19,7 @@ type AuthRequest struct {
 	ExpiryYear  string `json:"year"`
 	Name        string `json:"name"`
 	Postcode    string `json:"postcode"`
-	CVV         int    `json:"cvv"`
+	CVV         uint   `json:"cvv"`
 	PAN         string `json:"pan"`
 	MajorUnits  int    `json:"value"`
 	Currency    string `json:"currency"`
@@ -59,6 +59,7 @@ type RefundResponse struct {
 	OperationId      string `json:"operationId"`
 	ResponseCode     int    `json:"responseCode"`
 	AvailableBalance int    `json:"availableBalance"`
+	Currency         string `json:"currency"`
 	MajorUnits       int    `json:"value"`
 }
 
@@ -99,15 +100,12 @@ func (h *Handler) AuthorizeTransaction(w http.ResponseWriter, r *http.Request) {
 	err := NewDecoder.Decode(&newAuthRequest)
 	if err != nil {
 		log.Println("\n Unable to decode req", err)
+		errorBadRequest(w, "unable to decode request")
 		return
 	}
-	cleanedReq, err := transformAuth(newAuthRequest)
-	if err != nil {
-		log.Println("Unable to parse req to internal fields", err)
-		return
-	}
+	request := transformAuth(newAuthRequest)
 
-	resp, err := h.service.Authorize(cleanedReq)
+	resp, err := h.service.Authorize(request)
 	if err != nil {
 		log.Println("cant auth", err)
 		errorUnknownFailure(w, "failed to auth")
@@ -122,7 +120,7 @@ func (h *Handler) AuthorizeTransaction(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewEncoder(w).Encode(handlerResp)
 	if err != nil {
-		log.Println("failure to write resp")
+		log.Println("failure to write resp", err)
 		errorUnknownFailure(w, "unknown failure")
 		return
 	}
@@ -201,6 +199,7 @@ func (h *Handler) RefundTransaction(w http.ResponseWriter, r *http.Request) {
 		ResponseCode:     resp.Response.AsInt(),
 		MajorUnits:       resp.Amount.MajorUnits,
 		AvailableBalance: resp.AmountAvailable.MajorUnits,
+		Currency:         resp.Amount.Currency,
 	}
 
 	log.Println("refund response", handlerResp)
@@ -248,23 +247,23 @@ func (h *Handler) VoidTransaction(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func transformAuth(req AuthRequest) (models.AuthRequest, error) {
+func transformAuth(req AuthRequest) models.AuthRequest {
 	return models.AuthRequest{
-		CardInformation: models.CardData{
+		Card: models.Card{
 			Name:     req.Name,
 			Postcode: req.Postcode,
-		},
-		Expiry: models.Expiry{
-			Month: req.ExpiryMonth,
-			Year:  req.ExpiryYear,
+			Expiry: models.Expiry{
+				Month: req.ExpiryMonth,
+				Year:  req.ExpiryYear,
+			},
+			PAN: req.PAN,
+			CVV: req.CVV,
 		},
 		Amount: models.Amount{
 			MajorUnits: req.MajorUnits,
 			Currency:   req.Currency,
 		},
-		PAN: req.PAN,
-		CVV: req.CVV,
-	}, nil
+	}
 }
 
 func transformCapture(req CaptureRequest) (models.CaptureRequest, error) {
