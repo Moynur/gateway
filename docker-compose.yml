@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: "database"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      # if this was being hosted a separate docker compose for local credentials and for actually running the service would be nice
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    build: .
+    container_name: api_gateway
+    environment:
+      - DB_USERNAME="postgres"
+      - DB_PASSWORD="postgres"
+      - DB_DB="postgres"
+      - DB_HOST="db"
+      - DB_TABLE="postgres"
+      - DB_PORT="5432"
+    depends_on:
+      - db
+    ports:
+      - "8080:8081"
